@@ -170,37 +170,8 @@ public:
         }
     }
 
-// Division operator
-        Tensor operator/(const tensor& a, const tensor& b) {
-            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
-                std::terminate();
-            }
-            if (a.ndim_ != b.ndim_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
-                std::terminate();
-            }
-            if (a.size_ != b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
-                std::terminate();
-            }
-            ndim_ = a.ndim_;
-            size_ = a.size_;
-            for (size_t i = 0; i < ndim_; i++) {
-            if (a.shape_[i] != b.shape_[i]) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
-                std::terminate();
-            }
-            }
 
-            for (int i = 0; i < mat1_rows; i++) {
-        for (int j = 0; j < mat2_cols; j++) {
-            for (int k = 0; k < mat1_cols; k++) {
-                result[i][j] += mat1[i][k] * mat2[k][j];
-            }
-        }
-    }
-
+    
         void print() const {
             std::cout << "Tensor(" ;
             for (size_t i = 0; i < ndim_; i++) {
