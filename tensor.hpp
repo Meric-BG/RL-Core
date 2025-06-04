@@ -63,6 +63,7 @@ public:
         // Assignment
         Tensor operator=(const Tensor& other) {
             delete[] data_;
+            data_ = nullptr;
             data_ = new float[other.size];
             for (size_t i = 0; i < size_; i++) {
                 data_[i] = other.data_[i];
@@ -70,7 +71,107 @@ public:
 
         }
 
+        // Move constructor
+        Tensor(const tensor& other) {
+            ndim_ = other.ndim_;
+            data_ = other.data_;
+            shape_ = other.shape_;
+            size_ = other.size_;
 
+            for (size_t i = 0; i < ndim_; i++) {
+                shape_[i] = other.shape_[i];
+                //other.ndim_[i] = 0.0f; 
+            }
+
+            for (size_t i = 0; i < size; i++) {
+                data_[i] = other.data_[i];
+
+            }
+            other.shape_ = nullptr;
+            other.data_ = nullptr;
+        }
+
+        // Move assignment constructor
+        Tensor(const tensor& other) {
+            ndim_ = other.ndim_;
+            data_ = other.data_;
+            shape_ = other.shape_;
+            size_ = other.size_;
+            
+            data_ = nullptr;
+            shape_ = nullptr;
+
+            for (size_t i = 0; i < ndim_; i++) {
+                shape_[i] = other.shape_[i];
+                //other.ndim_[i] = 0.0f; 
+            }
+
+            for (size_t i = 0; i < size; i++) {
+                data_[i] = other.data_[i];
+
+            }
+            other.shape_ = nullptr;
+            other.data_ = nullptr;
+        }
+
+        // Addition operatot
+        Tensor operator+(const tensor& a, const tensor& b) {
+            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
+                std::terminate();
+            }
+            if (a.ndim_ != b.ndim_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
+                std::terminate();
+            }
+            if (a.size_ != b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
+                std::terminate();
+            }
+            ndim_ = a.ndim_;
+            size_ = a.size_;
+            for (size_t i = 0; i < ndim_; i++) {
+            if (a.shape_[i] != b.shape_[i]) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
+                std::terminate();
+            }
+        }
+
+        for (size_t i = 0; i < size_; i++) {
+            data_[i] = a.data_[i] + b.data_[i];
+        }
+        }
+
+        // Substraction operator
+        Tensor operator-(const tensor& a, const tensor& b) {
+            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
+                std::terminate();
+            }
+            if (a.ndim_ != b.ndim_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
+                std::terminate();
+            }
+            if (a.size_ != b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
+                std::terminate();
+            }
+            ndim_ = a.ndim_;
+            size_ = a.size_;
+            for (size_t i = 0; i < ndim_; i++) {
+            if (a.shape_[i] != b.shape_[i]) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
+                std::terminate();
+            }
+            }
+
+        for (size_t i = 0; i < size_; i++) {
+            data_[i] = a.data_[i] - b.data_[i];
+        }
+    }
+
+
+    
         void print() const {
             std::cout << "Tensor(" ;
             for (size_t i = 0; i < ndim_; i++) {
