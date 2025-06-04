@@ -170,6 +170,40 @@ public:
         }
     }
 
+        // multiplicator operator
+        Tensor operator*(const tensor& a, const tensor& b) {
+            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
+                std::terminate();
+            }
+            if (a.ndim_ != b.ndim_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
+                std::terminate();
+            }
+            if (ndim_ > 1 && (a.shape_[0] != a.shape_[1])) {
+                throw cerr << "Error, Tensor" << a << "'s rows number must be equal to Tensor" << b << "cols." << endl;
+                std::terminate();
+            }
+            if (a.size_ != b.size_) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
+                std::terminate();
+            }
+            ndim_ = a.ndim_;
+            size_ = a.size_;
+            for (size_t i = 0; i < ndim_; i++) {
+            if (a.shape_[i] != b.shape_[i]) {
+                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
+                std::terminate();
+            }
+            }
+    for (size_t i = 0; i < a.shape[0]; i++) {
+        for (size_t j = 0; j < b.shape[1]; j++) {
+            for (size_t k = 0; k < a.shape[1]; k++) {
+                data_[i][j] += a.data_[i][k] * b.data_[k][j];
+            }
+        }
+    }
+}
 
     
         void print() const {
