@@ -8,6 +8,7 @@
 
 class Tensor {
 private:    
+    
     float* data_;
     size_t* shape_;
     size_t ndim_;
@@ -43,6 +44,32 @@ public:
             }
             return data_[i];
         }
+
+        // Copy
+        Tensor(const Tensor& other) {
+            size_ = other.size_;
+            ndim_ = other.ndim_;
+
+            shape_ = new size_t[ndim_];
+            for (size_t i = 0; i < ndim_; i++) {
+                shape_[i] = other.shape_[i];
+            }
+            data_ = new float[size_];
+            for (size_t i = 0; i < size_; i++) {
+                data_[i] = other.data_[i];
+            }
+        }
+
+        // Assignment
+        Tensor operator=(const Tensor& other) {
+            delete[] data_;
+            data_ = new float[other.size];
+            for (size_t i = 0; i < size_; i++) {
+                data_[i] = other.data_[i];
+            }
+
+        }
+
 
         void print() const {
             std::cout << "Tensor(" ;
