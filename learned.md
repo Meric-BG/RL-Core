@@ -1,0 +1,1 @@
+A constructor is a function whichin the class that initialize values
