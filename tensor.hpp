@@ -1,4 +1,4 @@
-//tensor.hpp
+//Tensor.hpp
 #ifndef TENSOR_HPP
 #define TENSOR_HPP
 
@@ -45,7 +45,7 @@ public:
             return data_[i];
         }
 
-        // Copy
+        // Copy constructor
         Tensor(const Tensor& other) {
             size_ = other.size_;
             ndim_ = other.ndim_;
@@ -60,7 +60,7 @@ public:
             }
         }
 
-        // Assignment
+        // Copy Assignment
         Tensor operator=(const Tensor& other) {
             delete[] data_;
             data_ = nullptr;
@@ -72,7 +72,7 @@ public:
         }
 
         // Move constructor
-        Tensor(const tensor& other) {
+        Tensor(Tensor&& other) {
             ndim_ = other.ndim_;
             data_ = other.data_;
             shape_ = other.shape_;
@@ -92,7 +92,7 @@ public:
         }
 
         // Move assignment constructor
-        Tensor(const tensor& other) {
+        Tensor operator=(Tensor&& other) {
             ndim_ = other.ndim_;
             data_ = other.data_;
             shape_ = other.shape_;
@@ -115,25 +115,15 @@ public:
         }
 
         // Addition operatot
-        Tensor operator+(const tensor& a, const tensor& b) {
-            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
-                std::terminate();
-            }
+        Tensor operator+(const Tensor& a, const Tensor& b) {
             if (a.ndim_ != b.ndim_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
-                std::terminate();
-            }
-            if (a.size_ != b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "and Tensor" << b << "must have same rank.");
             }
             ndim_ = a.ndim_;
             size_ = a.size_;
             for (size_t i = 0; i < ndim_; i++) {
             if (a.shape_[i] != b.shape_[i]) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "and Tensor" << b << "must have same shape.");
             }
         }
 
@@ -143,25 +133,15 @@ public:
         }
 
         // Substraction operator
-        Tensor operator-(const tensor& a, const tensor& b) {
-            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
-                std::terminate();
-            }
+        Tensor operator-(const Tensor& a, const Tensor& b) {
             if (a.ndim_ != b.ndim_) {
                 throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
-                std::terminate();
-            }
-            if (a.size_ != b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
-                std::terminate();
             }
             ndim_ = a.ndim_;
             size_ = a.size_;
             for (size_t i = 0; i < ndim_; i++) {
             if (a.shape_[i] != b.shape_[i]) {
                 throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
-                std::terminate();
             }
             }
 
@@ -171,29 +151,21 @@ public:
     }
 
             // Multiplication operator
-        Tensor operator*(const tensor& a, const tensor& b) {
-            if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
-                std::terminate();
-            }
+        Tensor operator*(const Tensor& a, const Tensor& b) {
             if (a.ndim_ != b.ndim_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "and Tensor" << b << "must have same rank.");
             }
             if (a.ndim_ > 1 && (a.shape_[0] != a.shape_[1])) {
-                throw cerr << "Error, Tensor" << a << "'s rows number must be equal to Tensor" << b << "cols." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "'s rows number must be equal to Tensor" << b << "cols.");
             }
             if (a.size_ != b.size_) {
                 throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
-                std::terminate();
             }
             ndim_ = a.ndim_;
             size_ = a.size_;
             for (size_t i = 0; i < ndim_; i++) {
             if (a.shape_[i] != b.shape_[i]) {
                 throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
-                std::terminate();
             }
             }
     for (size_t i = 0; i < a.shape[0]; i++) {
@@ -207,29 +179,24 @@ public:
 }
 
         // Division operator
-        Tensor operator/(const tensor& a, const tensor& b) {
+        Tensor operator/(const Tensor& a, const Tensor& b) {
             if (!a.ndim_ || !b.ndim_ || !a.size_ || !b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "and Tensor" << b << "have underfined ndim or size.");
             }
             if (a.ndim_ != b.ndim_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same rank." << endl;
-                std::terminate();
+                throw cstd::runtime_error("Error, Tensor" << a << "and Tensor" << b << "must have same rank.");
             }
             if (a.ndim_ > 1 && (a.shape_[0] != a.shape_[1])) {
-                throw cerr << "Error, Tensor" << a << "'s rows number must be equal to Tensor" << b << "cols." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "'s rows number must be equal to Tensor" << b << "cols.");
             }
-            if (a.size_ != b.size_) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size." << endl;
-                std::terminate();
-            }
+            // if (a.size_ != b.size_) {
+            //     throw std::runtime_error("cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same size.");
+            // }
             ndim_ = a.ndim_;
             size_ = a.size_;
             for (size_t i = 0; i < ndim_; i++) {
             if (a.shape_[i] != b.shape_[i]) {
-                throw cerr << "Error, Tensor" << a << "and Tensor" << b << "must have same shape." << endl;
-                std::terminate();
+                throw std::runtime_error("Error, Tensor" << a << "and Tensor" << b << "must have same shape.");
             }
             }
     for (size_t i = 0; i < a.shape[0]; i++) {
